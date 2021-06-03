@@ -64,7 +64,10 @@ class ListarCliente extends Component {
                         <td data-title="Celular">{cliente.telefone}</td>
                         <td data-title="Endereço">{cliente.endereco}</td>
                         <td data-title="Ações">
-                          <Link className="btn btn-info btn-sm">
+                          <Link
+                            className="btn btn-info btn-sm"
+                            to={`/cliente/alterar/${cliente.id}`}
+                          >
                             <i className="fa fa-pencil"></i>
                           </Link>
                           <Link className="btn btn-danger btn-sm">

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { createCliente } from "../service/ClienteService";
+import { validarCliente } from "../validacao/ValidCliente";
 
 class IncluirCliente extends React.Component {
   constructor(props) {
@@ -15,6 +16,22 @@ class IncluirCliente extends React.Component {
     senha: "",
     telefone: "",
     cpf: "",
+
+    toReturn: false,
+
+    formValidation: {
+      nome: [],
+      email: [],
+      senha: [],
+      telefone: [],
+      cpf: [],
+
+      validNome: false,
+      validEmail: false,
+      validSenha: false,
+      validTelefone: false,
+      validCpf: false,
+    },
   });
 
   onChange = (e) => {
@@ -24,28 +41,40 @@ class IncluirCliente extends React.Component {
     });
   };
 
+  validarDigitacaoCliente() {
+    const { toReturn, formValidation } = this.state;
+    let state = validarCliente(this.state);
+    this.setState({
+      toReturn: state.toReturn,
+      formValidation: state.formValidation,
+    });
+    return state.toReturn;
+  }
+
   async handleSubimitCliente(e) {
     e.preventDefault();
 
-    const { nome, email, senha, telefone, cpf } = this.state;
+    if (this.validarDigitacaoCliente() == false) {
+      const { nome, email, senha, telefone, cpf } = this.state;
 
-    let cliente = {
-      nome: nome,
-      email: email,
-      senha: senha,
-      telefone: telefone,
-      cpf: cpf,
-    };
+      let cliente = {
+        nome: nome,
+        email: email,
+        senha: senha,
+        telefone: telefone,
+        cpf: cpf,
+      };
 
-    const resposta_servidor = await createCliente(cliente);
-    console.log(resposta_servidor);
+      const resposta_servidor = await createCliente(cliente);
+      console.log(resposta_servidor);
 
-    this.setState(
-      {
-        state: this.initState(),
-      },
-      this.listarCliente()
-    );
+      this.setState(
+        {
+          state: this.initState(),
+        },
+        this.listarCliente()
+      );
+    }
   }
 
   listarCliente = () => {
@@ -53,7 +82,7 @@ class IncluirCliente extends React.Component {
   };
 
   render() {
-    const { nome, email, senha, telefone, cpf } = this.state;
+    const { nome, email, senha, telefone, cpf, formValidation } = this.state;
 
     return (
       <div className="container pt-5">
@@ -72,8 +101,24 @@ class IncluirCliente extends React.Component {
                       value={nome}
                       onChange={(e) => this.onChange(e)}
                       id="nome"
-                      className="form-control "
+                      className={
+                        formValidation.validNome == true
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
                     />
+
+                    {formValidation.validNome && (
+                      <div className="invalid-feedback">
+                        {formValidation.nome.map((erro, index) => {
+                          return (
+                            <p key={index} style={{ margin: "0" }}>
+                              <span>{erro}</span>
+                            </p>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -88,8 +133,24 @@ class IncluirCliente extends React.Component {
                       id="email"
                       value={email}
                       onChange={(e) => this.onChange(e)}
-                      className="form-control"
+                      className={
+                        formValidation.validEmail == true
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
                     />
+
+                    {formValidation.validEmail && (
+                      <div className="invalid-feedback">
+                        {formValidation.email.map((erro, index) => {
+                          return (
+                            <p key={index} style={{ margin: "0" }}>
+                              <span>{erro}</span>
+                            </p>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -104,8 +165,24 @@ class IncluirCliente extends React.Component {
                       id="senha"
                       value={senha}
                       onChange={(e) => this.onChange(e)}
-                      className="form-control"
+                      className={
+                        formValidation.validSenha == true
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
                     />
+
+                    {formValidation.validSenha && (
+                      <div className="invalid-feedback">
+                        {formValidation.senha.map((erro, index) => {
+                          return (
+                            <p key={index} style={{ margin: "0" }}>
+                              <span>{erro}</span>
+                            </p>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -120,8 +197,24 @@ class IncluirCliente extends React.Component {
                       id="telefone"
                       value={telefone}
                       onChange={(e) => this.onChange(e)}
-                      className="form-control"
+                      className={
+                        formValidation.validTelefone == true
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
                     />
+
+                    {formValidation.validTelefone && (
+                      <div className="invalid-feedback">
+                        {formValidation.telefone.map((erro, index) => {
+                          return (
+                            <p key={index} style={{ margin: "0" }}>
+                              <span>{erro}</span>
+                            </p>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -136,8 +229,24 @@ class IncluirCliente extends React.Component {
                       id="cpf"
                       value={cpf}
                       onChange={(e) => this.onChange(e)}
-                      className="form-control"
+                      className={
+                        formValidation.validCpf == true
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
                     />
+
+                    {formValidation.validCpf && (
+                      <div className="invalid-feedback">
+                        {formValidation.cpf.map((erro, index) => {
+                          return (
+                            <p key={index} style={{ margin: "0" }}>
+                              <span>{erro}</span>
+                            </p>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
 
